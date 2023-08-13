@@ -19,6 +19,7 @@ const Home = () => {
     const fetchData = async () => {
       const response = await getData();
       if (response.success) {
+        if(response.data.hits.length!=0)
         setData(response.data.hits);
       console.log("response", response.data.hits);
       }
@@ -28,12 +29,13 @@ const Home = () => {
 
   const updateRecipe = (e) => {
     e.preventDefault();
+    console.log(search);
     setQuery(search);
   }
 
   return (
     <div>
-      <h1>Recipe Search</h1>
+      <h1 style={{'color' : 'red'}}>Recipe Search</h1>
       <form onSubmit={updateRecipe}>
         <input
           className={styles.search}
@@ -45,7 +47,7 @@ const Home = () => {
             setSearch(e.target.value);
           }}
         />
-        <button type="submit">Search</button>
+        <button type="submit" className={styles.button}>Search</button>
       </form>
 
       <div>
