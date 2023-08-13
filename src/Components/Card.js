@@ -1,19 +1,18 @@
 const Card = (props) => {
-  return (
+  return(
+  <div>
     <div>
-      <div>
-        <img src={/* props.image */} alt={/* props.title */} />
-      </div>
-      <div>
-        <a href="props.url">
-          <h2>{/* props.title */}</h2>
-        </a>
-        <a href={/* props.url */}>
-          <button>See More...</button>
-        </a>
-      </div>
+      <img src={props.img} alt={props.name} />
     </div>
-  );
+    <div>
+      <a href="props.url">
+        <h1>{props.name}</h1>
+      </a>
+      <a href={props.url} target="_blank">
+        <button>See More...</button>
+      </a>
+    </div>
+    </div>);
 };
 
 export default Card;

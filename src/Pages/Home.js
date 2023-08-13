@@ -1,34 +1,57 @@
 import React, { useState, useEffect } from "react";
-import { API_ID, API_KEY } from "../Utils";
+// import { getData } from "../api";
+import Card from "../Components/Card";
+import { API } from "../Utils";
+import { customFetch } from "../api";
 const Home = () => {
-  const [input, setInput] = useState([]);
-
+  const [data, setData] = useState([]);
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState("potato");
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          'https://api.edamam.com/api/recipes/v2?q=chicken&app_key=8a179740e34f332f6312efb0edabc8a4&_cont=CHcVQBtNNQphDmgVQntAEX4BYldtBAYEQ21GBWQaaldyDAQCUXlSB2ZCNl17BgcESmVBAjAaZ1RyUFFUEmAWB2tFMVQiBwUVLnlSVSBMPkd5BgMbUSYRVTdgMgksRlpSAAcRXTVGcV84SU4%3D&type=public&app_id=430e8df0'
-        );
-        const data = await response.json();
-        console.log(data.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+    const getData = () => {
+      return customFetch(
+        `https://api.edamam.com/api/recipes/v2?type=public&q=${query}&app_id=${API.APP_ID}&app_key=${API.APP_KEY}`,
+        {
+          method: "GET",
+        }
+      );
+    };
+    const fetchData = async () => {
+      const response = await getData();
+      if (response.success) {
+        setData(response.data.hits);
+      console.log("response", response.data.hits);
       }
-    }
-
+    };
     fetchData();
-  },[]);
+  }, [query]);
+
+  const updateRecipe = (e) => {
+    e.preventDefault();
+    setQuery(search);
+  }
 
   return (
     <div>
       <h1>Recipe Search</h1>
-      <input
+      <form onSubmit={updateRecipe}>
+        <input
         type="search"
         placeholder="Search a recipe"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-      <div>{/* <Card /> */}</div>
+        value={search}
+          onChange={(e) => {
+            console.log(search);
+            setSearch(e.target.value)
+          }}
+        />
+        <button type="submit">Search</button>
+      </form>
+      
+      <div>
+        {data.map((recipe) => (
+          <Card name={recipe.recipe.label} img={recipe.recipe.image} url={recipe.recipe.url} />
+        ))}
+      </div>
     </div>
   );
 };
