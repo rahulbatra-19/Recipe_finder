@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-// import { getData } from "../api";
 import Card from "../Components/Card";
 import { API } from "../Utils";
 import { customFetch } from "../api";
+import styles from '../styles/home.module.css';
 const Home = () => {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -36,21 +36,30 @@ const Home = () => {
       <h1>Recipe Search</h1>
       <form onSubmit={updateRecipe}>
         <input
-        type="search"
-        placeholder="Search a recipe"
-        value={search}
+          className={styles.search}
+          type="search"
+          placeholder="Search a recipe"
+          value={search}
           onChange={(e) => {
             console.log(search);
-            setSearch(e.target.value)
+            setSearch(e.target.value);
           }}
         />
         <button type="submit">Search</button>
       </form>
-      
+
       <div>
-        {data.map((recipe) => (
-          <Card name={recipe.recipe.label} img={recipe.recipe.image} url={recipe.recipe.url} />
-        ))}
+        <ol className={styles.list}>
+          {data.map((recipe) => (
+            <li>
+              <Card
+                name={recipe.recipe.label}
+                img={recipe.recipe.image}
+                url={recipe.recipe.url}
+              />
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   );
